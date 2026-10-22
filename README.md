@@ -1,3 +1,5 @@
+> 🚧 **Work in progress.** Built module by module; each item below links to working code as it lands.
+
 # aurora-orders
 
 Asynchronous order-processing platform running on Kubernetes, with all infrastructure defined in Terraform. One command brings it up from scratch on a laptop, with no cloud account required.
@@ -163,6 +165,26 @@ make down                       # destroy everything (state stays in MinIO)
 | Infrastructure CI | fmt, validate, tflint, trivy, kubeconform, pytest, mypy |
 | Observability | Business metrics in Grafana: orders/s, latency, queue depth, DLQ |
 | Operations and troubleshooting | `docs/runbooks/` with incidents triggered on purpose and resolved |
+
+
+## Resilience tests
+
+### Node failure
+
+A worker node was stopped (`docker stop`) with 4 pods running on it. Kubernetes waited
+the default 5-minute toleration, evicted the pods and rescheduled them on the healthy
+node with no manual action.
+
+![Pods rescheduled after node failure](docs/images/node-failure-recovery.png)
+*Worker node lost at 13:28:44 · 4 pods evicted at 13:33:44 · all replacements Running at 13:33:46.*
+
+| Event | Time after node loss |
+| --- | --- |
+| Pods evicted (default toleration) | 5 min |
+| Replacement pods `Running` | 5 min 2 s |
+
+
+
 
 ## Architecture decision records
 
