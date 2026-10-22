@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app.kubernetes.io/name: worker
+    app.kubernetes.io/part-of: aurora-orders
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: worker
+        app.kubernetes.io/part-of: aurora-orders
+    spec:
+      # Time Kubernetes waits after SIGTERM before force-killing (SIGKILL).
+      # Must be longer than the slowest order takes to process.
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: worker
+          image: aurora-worker:dev
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PROCESSING_SECONDS
+              value: "2"
+# No Service: nobody calls the worker. It pulls work from the queue (Module 2).

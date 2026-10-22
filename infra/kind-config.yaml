@@ -1,0 +1,20 @@
+# Local 3-node cluster: 1 control-plane + 2 workers.
+# Replaced by Terraform (infra/01-cluster) in Module 7.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: aurora
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+      - containerPort: 443
+        hostPort: 443
+  - role: worker
+  - role: worker
