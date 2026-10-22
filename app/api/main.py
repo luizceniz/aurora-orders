@@ -59,7 +59,7 @@ def create_order(order: OrderIn) -> OrderAccepted:
 @app.get("/healthz")
 def healthz() -> dict[str, str]:
     """Liveness: answers only whether this process is alive."""
-    return {"status": "ok"}
+    return {"status": "ok", "version" : APP_VERSION}
 
 
 @app.get("/version")
