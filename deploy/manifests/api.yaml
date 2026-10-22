@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: aurora-api:dev
+          image: aurora-api:v2
           imagePullPolicy: IfNotPresent # image is loaded into kind, not pulled from a registry
           ports:
             - name: http
